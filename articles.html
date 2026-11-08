@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpg" href="img/favicon.jpg">
+    <title>Articles | Gabriel Andrade</title>
+    <link rel="stylesheet" href="css/articles.css">
+</head>
+
+<body>
+
+<nav class="articles-nav">
+
+    <button class="mobile-menu-toggle" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+    </button>
+
+    <a href="index.html" class="logo">GABRIEL ANDRADE</a>
+
+    <ul class="nav-links">
+        <a href="photos.html">PHOTOS</a>
+        <a href="articles.html">ARTICLES</a>
+        <a href="https://www.instagram.com/gabrieldrde/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+    </ul>
+
+</nav>
+
+<div class="mobile-menu-overlay">
+
+    <button class="mobile-menu-close" aria-label="Fechar menu">
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="mobile-menu-options">
+        <a href="photos.html">PHOTOS</a>
+        <a href="articles.html">ARTICLES</a>
+        <a href="https://www.instagram.com/gabrieldrde/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+    </div>
+
+</div>
+
+<main class="articles-container">
+
+    <section class="articles-grid">
+
+<a href="article.html" class="article-card">
+
+    <img src="img/capa-01.jpg" alt="Capa do artigo 1">
+
+    <div class="article-info">
+        <hr>
+        <h2>exposição masp</h2>
+        <p>confluências de carolina caycedo</p>
+     </div>
+
+ </a>
+
+    </section>
+
+</main>
+
+<script>
+const menuButton = document.querySelector(".mobile-menu-toggle");
+const menuOverlay = document.querySelector(".mobile-menu-overlay");
+const closeButton = document.querySelector(".mobile-menu-close");
+
+menuButton.addEventListener("click", () => {
+    menuOverlay.classList.add("open");
+});
+
+closeButton.addEventListener("click", () => {
+    menuOverlay.classList.remove("open");
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        menuOverlay.classList.remove("open");
+    }
+});
+</script>
+
+</script>
+
+<footer class="site-footer">
+    <h2>GABRIEL ANDRADE</h2>
+
+    <div class="footer-links">
+        <a href="photos.html">PHOTOS</a>
+        <a href="articles.html">ARTICLES</a>
+        <a href="https://www.instagram.com/gabrieldrde/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+    </div>
+
+    <p>© 2026 GABRIEL ANDRADE</p>
+</footer>
+
+</body>
+</html>
+
+</body>
+</html>

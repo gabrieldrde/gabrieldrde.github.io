@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpg" href="img/favicon.jpg">
+    <title>Photos | Gabriel Andrade</title>
+    <link rel="stylesheet" href="css/photos.css">
+</head>
+
+<body>
+
+<nav class="photos-nav">
+
+    <button class="mobile-menu-toggle" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+    </button>
+
+    <a href="index.html" class="logo">GABRIEL ANDRADE</a>
+
+    <ul class="nav-links">
+    <a href="photos.html">PHOTOS</a>
+    <a href="articles.html">ARTICLES</a>
+    <a href="https://www.instagram.com/gabrieldrde/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+</ul>
+
+</nav>
+
+
+<div class="mobile-menu-overlay">
+    <button class="mobile-menu-close" aria-label="Fechar menu">
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="mobile-menu-options">
+        <a href="photos.html">PHOTOS</a>
+        <a href="https://www.instagram.com/gabrieldrde/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+        <a href="articles.html">ARTICLES</a>
+    </div>
+</div>
+
+
+    <main class="gallery">
+
+        <div class="photo"><img src="img/foto-01.jpg" alt="Fotografia 1"></div>
+        <div class="photo"><img src="img/foto-02.jpg" alt="Fotografia 2"></div>
+        <div class="photo"><img src="img/foto-03.jpg" alt="Fotografia 3"></div>
+        <div class="photo"><img src="img/foto-04.jpg" alt="Fotografia 4"></div>
+        <div class="photo"><img src="img/foto-05.jpg" alt="Fotografia 5"></div>
+        <div class="photo"><img src="img/foto-06.jpg" alt="Fotografia 6"></div>
+        <div class="photo"><img src="img/foto-07.jpg" alt="Fotografia 7"></div>
+        <div class="photo"><img src="img/foto-08.jpg" alt="Fotografia 8"></div>
+        <div class="photo"><img src="img/foto-09.jpg" alt="Fotografia 9"></div>
+        <div class="photo"><img src="img/foto-11.jpg" alt="Fotografia 11"></div>
+        <div class="photo"><img src="img/foto-12.jpg" alt="Fotografia 12"></div>
+        <div class="photo"><img src="img/foto-13.jpg" alt="Fotografia 13"></div>
+        <div class="photo"><img src="img/foto-14.jpg" alt="Fotografia 14"></div>
+        <div class="photo"><img src="img/foto-15.jpg" alt="Fotografia 15"></div>
+        <div class="photo"><img src="img/foto-17.jpg" alt="Fotografia 17"></div>
+        <div class="photo"><img src="img/foto-18.jpg" alt="Fotografia 18"></div>
+        <div class="photo"><img src="img/foto-19.jpg" alt="Fotografia 19"></div>
+        <div class="photo"><img src="img/foto-20.jpg" alt="Fotografia 20"></div>
+    </main>
+
+
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" aria-label="Fechar">&times;</button>
+
+<button class="lightbox-prev" aria-label="Foto anterior"></button>
+
+    <img id="lightbox-image" src="" alt="">
+
+<button class="lightbox-next" aria-label="Próxima foto"></button>
+</div>
+
+
+
+<script>
+const lightbox = document.getElementById("lightbox");
+const lightboxImage = document.getElementById("lightbox-image");
+
+const photos = Array.from(document.querySelectorAll(".photo img"));
+const prevButton = document.querySelector(".lightbox-prev");
+const nextButton = document.querySelector(".lightbox-next");
+
+let currentIndex = 0;
+let scale = 1;
+let posX = 0;
+let posY = 0;
+
+let startX = 0;
+let startY = 0;
+let startPosX = 0;
+let startPosY = 0;
+let startDistance = 0;
+let startScale = 1;
+let initialMidX = 0;
+let initialMidY = 0;
+
+let startTime = 0;
+let isPinching = false;
+let isDragging = false;
+
+function updateImage() {
+    lightboxImage.style.transform =
+        `translate(${posX}px, ${posY}px) scale(${scale})`;
+}
+
+function resetZoom() {
+    scale = 1;
+    posX = 0;
+    posY = 0;
+    updateImage();
+}
+
+function showPhoto(index) {
+    currentIndex = (index + photos.length) % photos.length;
+
+    resetZoom();
+
+    lightboxImage.src = photos[currentIndex].src;
+    lightboxImage.alt = photos[currentIndex].alt;
+}
+
+photos.forEach((img, index) => {
+    img.addEventListener("click", () => {
+        showPhoto(index);
+        lightbox.classList.add("active");
+        document.body.style.overflow = "hidden";
+    });
+});
+
+function nextPhoto() {
+    showPhoto(currentIndex + 1);
+}
+
+function previousPhoto() {
+    showPhoto(currentIndex - 1);
+}
+
+nextButton.addEventListener("click", nextPhoto);
+prevButton.addEventListener("click", previousPhoto);
+
+// GESTOS NO CELULAR
+
+function distance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.hypot(dx, dy);
+}
+
+lightbox.addEventListener("touchstart", event => {
+    if (event.touches.length === 2) {
+        isPinching = true;
+        isDragging = false;
+
+        startDistance = distance(event.touches);
+        startScale = scale;
+
+        initialMidX = (event.touches[0].clientX + event.touches[1].clientX) / 2;
+        initialMidY = (event.touches[0].clientY + event.touches[1].clientY) / 2;
+
+        startPosX = posX;
+        startPosY = posY;
+
+    } else if (event.touches.length === 1) {
+        startX = event.touches[0].clientX;
+        startY = event.touches[0].clientY;
+
+        startPosX = posX;
+        startPosY = posY;
+
+        startTime = Date.now();
+        isDragging = scale > 1;
+    }
+}, { passive: false });
+
+lightbox.addEventListener("touchmove", event => {
+    if (event.touches.length === 2) {
+        event.preventDefault();
+
+        const newDistance = distance(event.touches);
+
+        scale = Math.min(4, Math.max(1, startScale * newDistance / startDistance));
+
+        const midX = (event.touches[0].clientX + event.touches[1].clientX) / 2;
+        const midY = (event.touches[0].clientY + event.touches[1].clientY) / 2;
+
+        posX = startPosX + (midX - initialMidX);
+        posY = startPosY + (midY - initialMidY);
+
+        if (scale === 1) {
+            posX = 0;
+            posY = 0;
+        }
+
+        updateImage();
+
+    } else if (event.touches.length === 1 && scale > 1) {
+        event.preventDefault();
+
+        posX = startPosX + event.touches[0].clientX - startX;
+        posY = startPosY + event.touches[0].clientY - startY;
+
+        updateImage();
+    }
+}, { passive: false });
+
+lightbox.addEventListener("touchend", event => {
+    if (event.touches.length < 2) {
+        isPinching = false;
+    }
+
+    if (event.touches.length === 0) {
+        if (scale <= 1) {
+            scale = 1;
+            posX = 0;
+            posY = 0;
+
+            const endTouch = event.changedTouches[0];
+            const dx = startX - endTouch.clientX;
+            const dy = startY - endTouch.clientY;
+
+            if (
+                Math.abs(dx) > 60 &&
+                Math.abs(dx) > Math.abs(dy) &&
+                Date.now() - startTime < 700
+            ) {
+                dx > 0 ? nextPhoto() : previousPhoto();
+            }
+        }
+
+        isDragging = false;
+        updateImage();
+    }
+}, { passive: true });
+
+// FECHAR
+
+function closeLightbox() {
+    lightbox.classList.remove("active");
+    document.body.style.overflow = "";
+    resetZoom();
+}
+
+lightbox.addEventListener("click", event => {
+    if (
+        event.target === lightbox ||
+        event.target.classList.contains("lightbox-close")
+    ) {
+        closeLightbox();
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if (!lightbox.classList.contains("active")) return;
+
+    if (event.key === "Escape") closeLightbox();
+
+    if (event.key === "ArrowRight") nextPhoto();
+
+    if (event.key === "ArrowLeft") previousPhoto();
+});
+
+document.addEventListener("contextmenu", event => {
+    if (event.target.closest(".photo img, .lightbox img")) {
+        event.preventDefault();
+    }
+});
+</script>
+
+
+<script>
+const menuButton = document.querySelector(".mobile-menu-toggle");
+const menuOverlay = document.querySelector(".mobile-menu-overlay");
+const closeButton = document.querySelector(".mobile-menu-close");
+
+menuButton.addEventListener("click", () => {
+    menuOverlay.classList.add("open");
+});
+
+closeButton.addEventListener("click", () => {
+    menuOverlay.classList.remove("open");
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        menuOverlay.classList.remove("open");
+    }
+});
+
+</script>
+
+<footer class="site-footer">
+
+    <h2>GABRIEL ANDRADE</h2>
+
+    <div class="footer-links">
+        <a href="photos.html">PHOTOS</a>
+        <a href="articles.html">ARTICLES</a>
+        <a href="https://www.instagram.com/gabrieldrde/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+    </div>
+
+    <p>© 2026 GABRIEL ANDRADE</p>
+
+</footer>
+
+</body>
+</html>

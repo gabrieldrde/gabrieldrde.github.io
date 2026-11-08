@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="./img/favicon.jpg" sizes="any">
+<title>Gabriel Andrade</title>
+</head>
+
+<body>
+
+    <header>
+        <div class="banner">
+<video autoplay muted loop playsinline>
+    <source src="./movie/larissa.mp4" type="video/mp4">
+</video>
+
+
+            <div class="content">
+             <nav>
+    <a href="index.html" class="logo">GABRIEL ANDRADE</a>
+
+   <button class="mobile-menu-toggle" aria-label="Abrir menu">
+    <span></span>
+    <span></span>
+</button>
+
+    <ul class="nav-links">
+    <a href="photos.html">PHOTOS</a>
+    <a href="articles.html">ARTICLES</a>
+    <a href="https://www.instagram.com/gabrieldrde/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+</ul>
+</nav>
+<div class="mobile-menu-overlay">
+    <button class="mobile-menu-close" aria-label="Fechar menu">
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="mobile-menu-options">
+        <a href="photos.html">PHOTOS</a>
+        <a href="articles.html">ARTICLES</a>
+        <a href="https://www.instagram.com/gabrieldrde/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+    </div>
+</div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- SEQUÊNCIA DE FOTOGRAFIAS -->
+     <main>
+
+    <div class="home-gallery-heading">
+        <h2>HIGHLIGHTS</h2>
+    </div>
+        <section class="home-gallery">
+
+    <div class="home-photo">
+        <img src="img/foto-05.jpg" alt="Fotografia 5">
+    </div>
+
+    <div class="home-photo">
+        <img src="img/foto-09.jpg" alt="Fotografia 9">
+    </div>
+
+    <div class="home-photo">
+        <img src="img/foto-19.jpg" alt="Fotografia 19">
+    </div>
+
+</section>
+    </main>
+
+
+
+
+
+    <!-- VISUALIZADOR DE FOTOGRAFIAS -->
+    <div class="home-lightbox" id="home-lightbox">
+
+        <button class="home-lightbox-close" aria-label="Fechar">&times;</button>
+
+        <button class="home-lightbox-prev" aria-label="Foto anterior"></button>
+
+        <img id="home-lightbox-image" src="" alt="">
+
+        <button class="home-lightbox-next" aria-label="Próxima foto"></button>
+
+    </div>
+
+    <script>
+        const homeLightbox = document.getElementById("home-lightbox");
+        const homeLightboxImage = document.getElementById("home-lightbox-image");
+
+        const homePhotos = Array.from(
+            document.querySelectorAll(".home-photo img")
+        );
+
+        const homePrev = document.querySelector(".home-lightbox-prev");
+        const homeNext = document.querySelector(".home-lightbox-next");
+        const homeClose = document.querySelector(".home-lightbox-close");
+
+        let homeCurrentIndex = 0;
+
+        function showHomePhoto(index) {
+            homeCurrentIndex = (index + homePhotos.length) % homePhotos.length;
+
+            homeLightboxImage.src = homePhotos[homeCurrentIndex].src;
+            homeLightboxImage.alt = homePhotos[homeCurrentIndex].alt;
+        }
+
+        homePhotos.forEach((img, index) => {
+            img.addEventListener("click", () => {
+                showHomePhoto(index);
+                homeLightbox.classList.add("active");
+                document.body.style.overflow = "hidden";
+            });
+        });
+
+        homeNext.addEventListener("click", () => {
+            showHomePhoto(homeCurrentIndex + 1);
+        });
+
+        homePrev.addEventListener("click", () => {
+            showHomePhoto(homeCurrentIndex - 1);
+        });
+
+        function closeHomeLightbox() {
+            homeLightbox.classList.remove("active");
+            document.body.style.overflow = "";
+        }
+
+        homeClose.addEventListener("click", closeHomeLightbox);
+
+        homeLightbox.addEventListener("click", event => {
+            if (event.target === homeLightbox) {
+                closeHomeLightbox();
+            }
+        });
+
+        document.addEventListener("keydown", event => {
+            if (!homeLightbox.classList.contains("active")) return;
+
+            if (event.key === "Escape") {
+                closeHomeLightbox();
+            }
+
+            if (event.key === "ArrowRight") {
+                showHomePhoto(homeCurrentIndex + 1);
+            }
+
+            if (event.key === "ArrowLeft") {
+                showHomePhoto(homeCurrentIndex - 1);
+            }
+        });
+    </script>
+
+    <script>
+const menuButton = document.querySelector(".mobile-menu-toggle");
+const menuOverlay = document.querySelector(".mobile-menu-overlay");
+const closeButton = document.querySelector(".mobile-menu-close");
+
+menuButton.addEventListener("click", () => {
+    menuOverlay.classList.add("open");
+});
+
+closeButton.addEventListener("click", () => {
+    menuOverlay.classList.remove("open");
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        menuOverlay.classList.remove("open");
+    }
+});
+</script>
+
+<footer class="site-footer">
+
+    <h2>GABRIEL ANDRADE</h2>
+
+    <div class="footer-links">
+        <a href="photos.html">PHOTOS</a>
+        <a href="articles.html">ARTICLES</a>
+        <a href="https://www.instagram.com/gabrieldrde/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+    </div>
+
+    <p>© 2026 GABRIEL ANDRADE</p>
+
+</footer>
+
+
+</body>
+</html>
